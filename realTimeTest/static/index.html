@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>RealTimeTest</title>
+    </head>
+    <body>
+        <h1>WebSocket</h1>
+        <input id="wsInput" placeholder="Write a message ..." />
+        <button onclick="sendWS()">Send</button>
+        <pre id="wsOutput"></pre>
+
+        <h1>SSE</h1>
+        <button onclick="connectSSE()">Start SSE</button>
+        <pre id="sseOutput"></pre>
+
+        <script>
+            let ws = new WebSocket("ws://localhost:8080/ws");
+
+            ws.onmessage = e => {
+                document.getElementById("wsOutput").textContent += e.data + "\n";
+            };
+
+            function sendWS() {
+                const msg = document.getElementById("wsInput").value;
+                ws.send(msg);
+            }
+
+            function connectSSE() {
+                const sse = new EventSource("/sse");
+                sse.onmessage = e => {
+                    document.getElementById("sseOutput").textContent += e.data + "\n";
+                };
+            }
+        </script>
+    </body>
+</html>
